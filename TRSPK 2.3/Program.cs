@@ -13,7 +13,7 @@ g.AddChildren("h", "i");
 Node k = j.GetChildren().GetList()[0];
 k.AddChildren("l");
 string result = System.String.Empty;
-Console.WriteLine(a.TreeRoot(ref result, ""));
+Console.WriteLine(a.BuildTree(ref result, "", 0));
 
 public class Node
 {
@@ -53,53 +53,39 @@ public class Node
     {
         return Text;
     }
-
-    public string TreeRoot(ref string result, string otstup)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="result"></param>
+    /// <param name="otstup"></param>
+    /// <returns></returns>
+    public string BuildTree(ref string result, string otstup, int param)
     {
-        result = result + Text + "\n";
+        switch (param)
+        {
+            case 0:
+                result = result + Text + Environment.NewLine;
+                break;
+            case 1:
+                result = result + otstup + "├─" + Text + Environment.NewLine;
+                otstup = otstup + "│ ";
+                break;
+            case 2:
+                result = result + otstup + "└─" + Text + Environment.NewLine;
+                otstup = otstup + "  ";
+                break;
+        }
         List<Node> children = Children.GetList();
         for (int i = 0; i < children.Count - 1; i++)
         {
-            children[i].Tree(ref result, otstup);
+            children[i].BuildTree(ref result, otstup, 1);
         }
         if (children.Count != 0)
         {
-            children[children.Count - 1].Tree2(ref result, otstup);
+            children[children.Count - 1].BuildTree(ref result, otstup, 2);
         }
         return result;
-    }
 
-    public string Tree(ref string result, string otstup)
-    {
-        
-        List<Node> children = Children.GetList();
-        result = result + otstup + "├─" + Text + "\n";
-        otstup = otstup + "│ ";
-        for (int i = 0; i < children.Count - 1; i++)
-        {
-            children[i].Tree(ref result, otstup);
-        }
-        if (children.Count != 0)
-        {
-            children[children.Count - 1].Tree2(ref result, otstup);
-        }
-        return result;
-    }
-
-    public string Tree2(ref string result, string otstup)
-    {
-        List<Node> children = Children.GetList();
-        result = result + otstup + "└─" + Text + "\n";
-        otstup = otstup + "  ";
-        for (int i = 0; i < children.Count - 1; i++)
-        {
-            children[i].Tree(ref result, otstup);
-        }
-        if (children.Count != 0)
-        {
-            children[children.Count - 1].Tree2(ref result, otstup);
-        }
-        return result;
     }
 }
 public class NodeList
